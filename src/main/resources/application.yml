@@ -1,0 +1,28 @@
+server:
+  port: 9090
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/online_pharma_4?currentSchema=dev
+    username: postgres
+    password: admin123
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+
+
+
+api:
+  info:
+    title: 'Online Pharma'
+
+#springdoc:
+#  swagger-ui:
+#    path: /ui
+#  api-docs:
+#    path: /docs
