@@ -12,6 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -21,6 +22,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 @Slf4j
 @Component
@@ -42,10 +44,9 @@ public class AuthorizationFilter extends OncePerRequestFilter {
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             try {
                 String token = authorizationHeader.substring("Bearer ".length());
+                // TODO: 27/04/22 call token "Token" "with type access"
                 DecodedJWT decodedJWT = JWTUtils.getVerifier().verify(token);
-                String code = decodedJWT.getSubject();
-                // TODO: 26/04/22 call db here
-
+                List<SimpleGrantedAuthority> authorities = decodedJWT.getClaim("authorities").asList(SimpleGrantedAuthority.class);
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(code, null, authorities);
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                 filterChain.doFilter(request, response);
@@ -53,7 +54,7 @@ public class AuthorizationFilter extends OncePerRequestFilter {
                 log.error("Error logging in: {}", exception.getMessage());
                 response.setHeader("error", exception.getMessage());
                 response.setStatus(HttpStatus.FORBIDDEN.value());
-                DataDto<AppErrorDto> responseDTO = new DataDto<>(new AppErrorDto(HttpStatus.FORBIDDEN, exception.getLocalizedMessage(), request.getRequestURI()))
+                DataDto<AppErrorDto> responseDTO = new DataDto<>(new AppErrorDto(HttpStatus.FORBIDDEN, exception.getLocalizedMessage(), request.getRequestURI()));
                 response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                 mapper.writeValue(response.getOutputStream(), responseDTO);
             }

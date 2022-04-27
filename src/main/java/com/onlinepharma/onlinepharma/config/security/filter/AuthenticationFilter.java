@@ -5,9 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.onlinepharma.onlinepharma.config.security.utils.JWTUtils;
 import com.onlinepharma.onlinepharma.dto.auth.LoginDto;
 import com.onlinepharma.onlinepharma.dto.auth.SessionDto;
+import com.onlinepharma.onlinepharma.dto.auth.TokenCreateDTO;
 import com.onlinepharma.onlinepharma.dto.auth.UserDetails;
 import com.onlinepharma.onlinepharma.dto.response.AppErrorDto;
 import com.onlinepharma.onlinepharma.dto.response.DataDto;
+import com.onlinepharma.onlinepharma.enums.TokenType;
 import com.onlinepharma.onlinepharma.service.auth.AuthService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -58,21 +60,26 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
                                             Authentication authentication) throws IOException, ServletException, IOException {
         UserDetails user = (UserDetails) authentication.getPrincipal();
+
         Date expiryForAccessToken = JWTUtils.getExpiry();
+
         Date expiryForRefreshToken = JWTUtils.getExpiryForRefreshToken();
+
+        Date issuedAt = new Date();
 
         String accessToken = JWT.create()
                 .withSubject(user.getUser().getCode().toString())
-                .withClaim("type", "access")
                 .withExpiresAt(expiryForAccessToken)
                 .withIssuer(request.getRequestURL().toString())
+                .withIssuedAt(issuedAt)
+                .withClaim("authorities", user.getAuthorities())
                 .sign(JWTUtils.getAlgorithm());
 
         String refreshToken = JWT.create()
                 .withSubject(user.getUsername())
-                .withClaim("type", "refresh")
                 .withExpiresAt(expiryForRefreshToken)
                 .withIssuer(request.getRequestURL().toString())
+                .withIssuedAt(issuedAt)
                 .sign(JWTUtils.getAlgorithm());
 
         SessionDto sessionDto = SessionDto.builder()
@@ -82,6 +89,20 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                 .refreshTokenExpiry(expiryForRefreshToken.getTime())
                 .issuedAt(System.currentTimeMillis())
                 .build();
+
+        authService.storeToken(TokenCreateDTO.builder()
+                .token(accessToken)
+                .expiresAt(expiryForAccessToken)
+                .tokenType(TokenType.ACCESS)
+                .userId(user.getUser().getId())
+                .build());
+
+        authService.storeToken(TokenCreateDTO.builder()
+                .token(refreshToken)
+                .expiresAt(expiryForRefreshToken)
+                .tokenType(TokenType.REFRESH)
+                .userId(user.getUser().getId())
+                .build());
 
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         mapper.writeValue(response.getOutputStream(), new DataDto<>(sessionDto));
