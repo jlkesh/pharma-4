@@ -1,12 +1,13 @@
 package com.onlinepharma.onlinepharma.config.security;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.onlinepharma.onlinepharma.config.handlers.CustomAuthenticationFailureHandler;
 import com.onlinepharma.onlinepharma.config.security.filter.AuthenticationFilter;
 import com.onlinepharma.onlinepharma.config.security.filter.AuthorizationFilter;
 import com.onlinepharma.onlinepharma.service.auth.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -32,6 +33,8 @@ import java.util.List;
         jsr250Enabled = true)
 public class ApplicationSecurityConfigurer extends WebSecurityConfigurerAdapter {
     public final static String[] WHITE_LIST = {
+            "/error",
+            "/api/login",
             "/auth/access/token",
             "/auth/refresh/token",
             "/auth/register",
@@ -40,9 +43,10 @@ public class ApplicationSecurityConfigurer extends WebSecurityConfigurerAdapter 
     };
 
     private final AuthService authService;
-    private final AuthenticationFilter authenticationFilter;
+    private final ObjectMapper mapper;
     private final AuthorizationFilter authorizationFilter;
     private final PasswordEncoder passwordEncoder;
+    private final CustomAuthenticationFailureHandler authenticationFailureHandler;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -73,7 +77,7 @@ public class ApplicationSecurityConfigurer extends WebSecurityConfigurerAdapter 
                                 .anyRequest()
                                 .authenticated());
 
-        http.addFilter(authenticationFilter);
+        http.addFilter(new AuthenticationFilter(authenticationManager(), mapper));
         http.addFilterBefore(authorizationFilter, UsernamePasswordAuthenticationFilter.class);
 
     }

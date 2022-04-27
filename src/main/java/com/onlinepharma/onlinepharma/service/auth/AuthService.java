@@ -1,6 +1,5 @@
 package com.onlinepharma.onlinepharma.service.auth;
 
-import com.onlinepharma.onlinepharma.criteria.auth.TokenCriteria;
 import com.onlinepharma.onlinepharma.criteria.auth.UserCriteria;
 import com.onlinepharma.onlinepharma.domain.auth.Token;
 import com.onlinepharma.onlinepharma.domain.auth.Users;
@@ -24,11 +23,10 @@ public class AuthService implements UserDetailsService {
     private final BaseUtils utils;
 
     @Override
-    public UserDetails loadUserByUsername(String credential) throws UsernameNotFoundException {
-        Users users = userRepository.find(UserCriteria.childBuilder().credential(credential).build());
-
+    public UserDetails loadUserByUsername(String principal) throws UsernameNotFoundException {
+        Users users = userRepository.find(UserCriteria.childBuilder().principal(principal).build());
         if (utils.isEmpty(users))
-            throw new RuntimeException("User not found Exception");
+            throw new UsernameNotFoundException("User not found Exception");
 
         return new UserDetails(users);
     }

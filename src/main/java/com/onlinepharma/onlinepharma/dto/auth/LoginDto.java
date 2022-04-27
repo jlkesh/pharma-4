@@ -10,6 +10,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class LoginDto implements Dto {
-    private String credential;
+    private String principal;
     private String password;
 }

@@ -12,12 +12,12 @@ import org.springdoc.api.annotations.ParameterObject;
 @NoArgsConstructor
 @ParameterObject
 public class UserCriteria extends GenericCriteria {
-    private String credential;
+    private String principal;
 
     @Builder(builderMethodName = "childBuilder")
-    public UserCriteria(Long selfId, Integer page, Integer perPage, String sortBy, String sortDirection, String credential) {
+    public UserCriteria(Long selfId, Integer page, Integer perPage, String sortBy, String sortDirection, String principal) {
         super(selfId, page, perPage, sortBy, sortDirection);
-        this.credential = credential;
+        this.principal = principal;
     }
 
 }

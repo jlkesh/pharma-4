@@ -32,7 +32,7 @@ public class OnlinePharmaApplication {
         return (args) -> {
             Users admin = new Users();
             admin.setLanguage(Language.EN);
-            admin.setSerialNumber("AB1231234");
+            admin.setPrincipal("AB1231234");
             admin.setPassword(passwordEncoder.encode("admin123"));
             admin.setStatus(Status.ACTIVE);
             admin.setCreatedBy(-1L);

@@ -129,7 +129,7 @@ public abstract class GenericDao<T extends Auditable, C extends GenericCriteria>
     protected Query defineQuerySelect(C criteria, StringBuilder queryBuilder, boolean onDefineCount) {
         String queryStr = " select " + (onDefineCount ? " count(t) " : " t ") + " from " + persistentClass.getSimpleName() + " t " +
                 joinStringOnQuerying(criteria) +
-                " where not t.deleted " + queryBuilder.toString() + (onDefineCount ? "" : onSortBy(criteria).toString());
+                " where t.deleted = false " + queryBuilder.toString() + (onDefineCount ? "" : onSortBy(criteria).toString());
         return onDefineCount ? entityManager.createQuery(queryStr, Long.class) : entityManager.createQuery(queryStr);
     }
 

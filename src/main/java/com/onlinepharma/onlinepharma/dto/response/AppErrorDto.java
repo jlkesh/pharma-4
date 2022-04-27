@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class AppErrorDto {
     private Timestamp timestamp;
     private Integer status;

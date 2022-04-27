@@ -23,7 +23,7 @@ import java.util.UUID;
 public class Users extends Auditable {
 
     @Column(nullable = false, unique = true)
-    private String credential;
+    private String principal;
 
     @Column(nullable = false)
     private String password;
