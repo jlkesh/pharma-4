@@ -5,6 +5,7 @@ import com.onlinepharma.onlinepharma.enums.Language;
 import com.onlinepharma.onlinepharma.enums.Status;
 import com.onlinepharma.onlinepharma.properties.OpenApiProperties;
 import com.onlinepharma.onlinepharma.repository.auth.UserRepository;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -12,6 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 @EnableConfigurationProperties({
@@ -27,7 +29,7 @@ public class OnlinePharmaApplication {
         SpringApplication.run(OnlinePharmaApplication.class, args);
     }
 
-//    @Bean
+    //@Bean
     CommandLineRunner runner() {
         return (args) -> {
             Users admin = new Users();
@@ -38,6 +40,11 @@ public class OnlinePharmaApplication {
             admin.setCreatedBy(-1L);
             userRepository.save(admin);
         };
+    }
+
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 
 

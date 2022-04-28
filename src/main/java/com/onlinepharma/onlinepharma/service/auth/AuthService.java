@@ -3,24 +3,38 @@ package com.onlinepharma.onlinepharma.service.auth;
 import com.onlinepharma.onlinepharma.criteria.auth.UserCriteria;
 import com.onlinepharma.onlinepharma.domain.auth.Token;
 import com.onlinepharma.onlinepharma.domain.auth.Users;
+import com.onlinepharma.onlinepharma.dto.auth.LoginDto;
+import com.onlinepharma.onlinepharma.dto.auth.SessionDto;
 import com.onlinepharma.onlinepharma.dto.auth.TokenCreateDTO;
 import com.onlinepharma.onlinepharma.dto.auth.UserDetails;
+import com.onlinepharma.onlinepharma.dto.response.DataDto;
 import com.onlinepharma.onlinepharma.repository.auth.TokenRepository;
 import com.onlinepharma.onlinepharma.repository.auth.UserRepository;
 import com.onlinepharma.onlinepharma.utils.BaseUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 @RequiredArgsConstructor
-public class AuthService implements UserDetailsService {
+public class AuthService implements UserDetailsService, BaseService {
 
     private final UserRepository userRepository;
     private final TokenRepository tokenRepository;
     private final BaseUtils utils;
+    private final RestTemplate restTemplate;
+
+
+    public ResponseEntity<DataDto<SessionDto>> login(LoginDto dto) {
+        DataDto url = restTemplate.postForObject("http://localhost:9090/api/login", dto, DataDto.class);
+        return new ResponseEntity<>(url, HttpStatus.OK);
+    }
+
 
     @Override
     public UserDetails loadUserByUsername(String principal) throws UsernameNotFoundException {
@@ -53,4 +67,5 @@ public class AuthService implements UserDetailsService {
         token.setCreatedBy(dto.getUserId());
         tokenRepository.save(token);
     }
+
 }

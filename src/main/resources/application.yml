@@ -19,10 +19,18 @@ spring:
 
 api:
   info:
-    title: 'Online Pharma'
+    title: Online Pharma
+    description: Online queue
+    version: 1.0
+    terms-of-service: https://unicorn.pdp.uz
+    contact-name: pdp.uz
+    contact-email: 000
+    contact-url: https://pdp.uz
+    license-name: Apache 2.0
+    license-url: https://www.apache.org/licenses/LICENSE-2.0.html
 
-#springdoc:
-#  swagger-ui:
-#    path: /ui
-#  api-docs:
-#    path: /docs
+
+springdoc:
+  api-docs:
+    path: /api-docs
+    enabled: true

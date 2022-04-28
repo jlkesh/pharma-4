@@ -35,9 +35,9 @@ public class ApplicationSecurityConfigurer extends WebSecurityConfigurerAdapter 
     public final static String[] WHITE_LIST = {
             "/error",
             "/api/login",
-            "/auth/access/token",
-            "/auth/refresh/token",
-            "/auth/register",
+            "/api/v1/auth/access/token",
+            "/api/v1/auth/refresh/token",
+            "/api/v1/auth/register",
             "/swagger-ui/**",
             "/api-docs/**"
     };

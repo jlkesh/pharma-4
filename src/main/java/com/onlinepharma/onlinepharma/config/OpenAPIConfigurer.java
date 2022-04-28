@@ -11,10 +11,12 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
 @OpenAPIDefinition
+@Configuration
 @RequiredArgsConstructor
 @ConditionalOnProperty(name = "springdoc.swagger-ui.enabled", havingValue = "true", matchIfMissing = true)
 public class OpenAPIConfigurer {
@@ -26,7 +28,8 @@ public class OpenAPIConfigurer {
 
     @Bean
     public OpenAPI api() {
-        return new OpenAPI().schemaRequirement(SECURITY_SCHEMA_NAME, getSecurityScheme()).security(getSecurityRequirements()).info(info());
+        return new OpenAPI().schemaRequirement(SECURITY_SCHEMA_NAME,
+                getSecurityScheme()).security(getSecurityRequirements()).info(info());
     }
 
     private SecurityScheme getSecurityScheme() {

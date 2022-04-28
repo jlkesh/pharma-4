@@ -1,7 +1,9 @@
 package com.onlinepharma.onlinepharma.dto.auth;
 
+import com.onlinepharma.onlinepharma.annotations.Unique;
 import com.onlinepharma.onlinepharma.dto.Dto;
 import com.onlinepharma.onlinepharma.enums.TokenType;
+import com.onlinepharma.onlinepharma.enums.annotations.FieldType;
 import lombok.*;
 
 import java.util.Date;

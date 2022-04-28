@@ -51,7 +51,7 @@ public abstract class GenericDao<T extends Auditable, C extends GenericCriteria>
 
     public T find(Long id) {
         try {
-            return entityManager.createQuery("select t from " + persistentClass.getSimpleName() + " t where not t.deleted and t.id = " + id, persistentClass).getSingleResult();
+            return entityManager.createQuery("select t from " + persistentClass.getSimpleName() + " t where t.deleted = false and t.id = " + id, persistentClass).getSingleResult();
         } catch (NoResultException ex) {
             return null;
         }

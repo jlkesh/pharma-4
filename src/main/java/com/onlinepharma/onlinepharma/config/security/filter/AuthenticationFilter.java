@@ -61,7 +61,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         Date issuedAt = new Date();
 
         String accessToken = JWT.create()
-                .withSubject(user.getUser().getCode().toString())
+                .withSubject("" + user.getUser().getId())
                 .withExpiresAt(expiryForAccessToken)
                 .withIssuer(request.getRequestURL().toString())
                 .withIssuedAt(issuedAt)
