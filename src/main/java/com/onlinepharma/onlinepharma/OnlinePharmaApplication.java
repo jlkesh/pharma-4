@@ -12,8 +12,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.Locale;
 
 @SpringBootApplication
 @EnableConfigurationProperties({
@@ -47,5 +50,14 @@ public class OnlinePharmaApplication {
         return new RestTemplate();
     }
 
+    @Bean("messageSource")
+    public ResourceBundleMessageSource messageSource() {
+        ResourceBundleMessageSource source = new ResourceBundleMessageSource();
+        source.setBasename("i18n/messages");
+        source.setDefaultLocale(Locale.forLanguageTag("uz"));
+        source.setDefaultEncoding("UTF-8");
+        source.setUseCodeAsDefaultMessage(true);
+        return source;
+    }
 
 }
