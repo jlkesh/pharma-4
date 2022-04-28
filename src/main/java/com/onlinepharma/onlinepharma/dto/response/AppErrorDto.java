@@ -3,6 +3,7 @@ package com.onlinepharma.onlinepharma.dto.response;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class AppErrorDto {
     private Timestamp timestamp;
     private Integer status;

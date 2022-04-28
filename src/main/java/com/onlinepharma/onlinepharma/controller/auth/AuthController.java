@@ -41,7 +41,7 @@ public class AuthController extends AbstractController<AuthService> {
             }
     )
     @RequestMapping(value = PATH + "/auth/access/token", method = RequestMethod.POST)
-    public ResponseEntity<DataDto<SessionDto>> login(@RequestBody LoginDto dto) {
+    public ResponseEntity<String> login(@RequestBody LoginDto dto) {
         return service.login(dto);
     }
 

@@ -29,7 +29,7 @@ public class OnlinePharmaApplication {
         SpringApplication.run(OnlinePharmaApplication.class, args);
     }
 
-    //@Bean
+//    @Bean
     CommandLineRunner runner() {
         return (args) -> {
             Users admin = new Users();

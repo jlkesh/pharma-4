@@ -12,13 +12,17 @@ import com.onlinepharma.onlinepharma.repository.auth.TokenRepository;
 import com.onlinepharma.onlinepharma.repository.auth.UserRepository;
 import com.onlinepharma.onlinepharma.utils.BaseUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
+
+import java.lang.reflect.ParameterizedType;
 
 @Service
 @RequiredArgsConstructor
@@ -30,9 +34,8 @@ public class AuthService implements UserDetailsService, BaseService {
     private final RestTemplate restTemplate;
 
 
-    public ResponseEntity<DataDto<SessionDto>> login(LoginDto dto) {
-        DataDto url = restTemplate.postForObject("http://localhost:9090/api/login", dto, DataDto.class);
-        return new ResponseEntity<>(url, HttpStatus.OK);
+    public ResponseEntity<String> login(LoginDto dto) {
+        return restTemplate.postForEntity("http://localhost:9090/api/login", dto, String.class);
     }
 
 
